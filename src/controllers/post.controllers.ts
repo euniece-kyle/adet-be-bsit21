@@ -17,22 +17,21 @@ export async function getPostById(context: Context) {
   try {
     const id = context.req.param('id');
     
-    // 1. Run the query
+
     const [rows] = await pool.query<any[]>(
       "SELECT * FROM posts WHERE post_id = ?", 
       [id]
     );
 
-    // 2. Check if the array is empty (length is 0)
     if (!rows || rows.length === 0) {
-      // This is the "Error Handling" part of Phase 8!
+    
       return context.json({ 
         success: false, 
         message: "Post not found" 
-      }, 404); // Specifically sending 404 status
+      }, 404); 
     }
 
-    // 3. If it exists, return the first item in the array
+ 
     return context.json(rows[0], 200);
 
   } catch (error: any) {
@@ -44,8 +43,7 @@ export async function createPost(context: Context) {
   try {
     const body: CreatePostModel = await context.req.json();
     
-    // Validation for creating a post
-    // Use zod to validate the data
+  
     if (!body.title || body.title === "") {
       return context.json({ message: "Title is required" }, 400);
     }
